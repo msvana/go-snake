@@ -37,6 +37,8 @@ func main() {
 			game.Snake.Dir = model.Left
 		case gdk.KEY_Right:
 			game.Snake.Dir = model.Right
+		case gdk.KEY_space:
+			game.Paused = !game.Paused
 		}
 	})
 

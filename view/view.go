@@ -76,12 +76,18 @@ func (v *View) QueueDraw() {
 func (v *View) draw(da *gtk.DrawingArea, cr *cairo.Context) {
 	if v.game.GameOver {
 		v.drawGameOver(cr)
-	} else {
-		v.drawBackground(cr)
-		v.drawFood(cr)
-		v.drawSnake(cr)
-		v.drawScore(cr)
+		return
 	}
+
+	if v.game.Paused {
+		v.drawPaused(cr)
+		return
+	}
+
+	v.drawBackground(cr)
+	v.drawFood(cr)
+	v.drawSnake(cr)
+	v.drawScore(cr)
 }
 
 func (v *View) drawGameOver(cr *cairo.Context) {
@@ -94,6 +100,18 @@ func (v *View) drawGameOver(cr *cairo.Context) {
 	cr.SetFontSize(50)
 	cr.MoveTo(100, 100)
 	cr.ShowText("Game Over")
+}
+
+func (v *View) drawPaused(cr *cairo.Context) {
+	cr.SetSourceRGB(0.529, 0.808, 0.922)
+	cr.Rectangle(0, 0, float64(v.drawingArea.GetAllocatedWidth()), float64(v.drawingArea.GetAllocatedHeight()-v.config.PanelHeight))
+	cr.FillPreserve()
+	cr.Stroke()
+	cr.SetSourceRGB(1.0, 1.0, 1.0)
+	cr.SelectFontFace("Arial", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+	cr.SetFontSize(24)
+	cr.MoveTo(100, 100)
+	cr.ShowText("Paused. Press SPACE to continue.")
 }
 
 func (v *View) drawBackground(cr *cairo.Context) {

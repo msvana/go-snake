@@ -14,6 +14,7 @@ type Game struct {
 	GameOver bool
 	Snake    *Snake
 	Food     Point
+	Paused   bool
 }
 
 func NewGame(config GameConfig) *Game {
@@ -30,6 +31,10 @@ func NewGame(config GameConfig) *Game {
 }
 
 func (g *Game) Tick() {
+	if g.Paused {
+		return
+	}
+
 	g.Snake.Move()
 
 	if g.Snake.CollidesWithFood(g.Food) {
